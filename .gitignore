@@ -35,6 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
-
 ### 구글 OAuth 2.0 ###
 src/main/resources/application-oauth.yml

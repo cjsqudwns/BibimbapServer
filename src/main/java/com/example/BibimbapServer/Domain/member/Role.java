@@ -1,4 +1,4 @@
-package com.example.BibimbapServer.Domain.user;
+package com.example.BibimbapServer.Domain.member;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

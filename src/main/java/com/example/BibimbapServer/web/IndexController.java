@@ -28,15 +28,27 @@ public class IndexController {
 
     // "/posts/save"로 GET 요청이 들어오면 posts-save.mustache를 띄워줌
     @GetMapping("/posts/save")
-    public String postsSave() {
+    public String postsSave(Model model) {
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        if(user != null){
+            model.addAttribute("userName", user.getName());
+        }
         return "posts-save";
     }
 
     @GetMapping("/posts/update/{id}")
     public String postsUpdate(@PathVariable Long id, Model model) {
         PostsResponseDto dto = postsService.findById(id);
-        model.addAttribute("post", dto);
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        try{
+            if(!dto.getMember().getEmail().equals(user.getEmail()))
+                throw new IllegalArgumentException();
+        }catch(Exception e){
+            System.out.println("글 작성자 본인만 글을 수정할 수 있습니다");
+            return "/";
+        }
 
+        model.addAttribute("post", dto);
         return "posts-update";
     }
     @DeleteMapping("/api/v1/posts/{id}")

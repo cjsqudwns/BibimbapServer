@@ -1,9 +1,13 @@
 package com.example.BibimbapServer.Domain.member;
 
+import com.example.BibimbapServer.Domain.posts.Posts;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -25,12 +29,15 @@ public class Member {
     @Column(nullable = false)
     private Role role;
 
+    @OneToMany(mappedBy = "member")
+    List<Posts> posts = new ArrayList<>();
+
     @Builder
     public Member(String name, String email, String picture, Role role) {
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.role = role;
+        this.role = Role.USER;
     }
 
     public Member update(String name, String picture){

@@ -1,10 +1,12 @@
 package com.example.BibimbapServer.Domain.posts;
 
 import com.example.BibimbapServer.Domain.BaseTimeEntity;
+import com.example.BibimbapServer.Domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
@@ -14,6 +16,11 @@ public class Posts extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @Column(length = 500, nullable = false)
     private String title;

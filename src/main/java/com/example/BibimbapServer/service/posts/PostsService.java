@@ -1,11 +1,15 @@
 package com.example.BibimbapServer.service.posts;
 
+import com.example.BibimbapServer.Domain.member.Member;
+import com.example.BibimbapServer.Domain.member.MemberRepository;
 import com.example.BibimbapServer.Domain.posts.Posts;
 import com.example.BibimbapServer.Domain.posts.PostsRepository;
+import com.example.BibimbapServer.security.dto.SessionUser;
 import com.example.BibimbapServer.web.dto.PostsListResponseDto;
 import com.example.BibimbapServer.web.dto.PostsResponseDto;
 import com.example.BibimbapServer.web.dto.PostsSaveRequestDto;
 import com.example.BibimbapServer.web.dto.PostsUpdateRequestDto;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.persistence.annotations.ReadOnly;
 import org.springframework.stereotype.Service;
@@ -19,10 +23,17 @@ import java.util.stream.Collectors;
 public class PostsService {
 
     private final PostsRepository postsRepository;
+    private final MemberRepository memberRepository;
+    private final HttpSession httpSession;
 
     @Transactional
     public Long save(PostsSaveRequestDto requestDto) {
-        return postsRepository.save(requestDto.toEntity()).getId();
+        Posts posts = requestDto.toEntity();
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        Member member = memberRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("해당 email을 가진 member가 없습니다. id=" + user.getEmail()));
+        posts.setMember(member);
+        return postsRepository.save(posts).getId();
     }
 
     @Transactional

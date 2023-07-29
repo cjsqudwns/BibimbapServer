@@ -1,16 +1,12 @@
 package com.example.BibimbapServer.Domain.posts;
 
 import com.example.BibimbapServer.Domain.BaseTimeEntity;
-import com.example.BibimbapServer.Domain.like.Like;
 import com.example.BibimbapServer.Domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -34,8 +30,10 @@ public class Posts extends BaseTimeEntity {
 
     private String author;
 
-    @OneToMany(mappedBy = "like")
-    List<Like> like = new ArrayList<>();
+//    @OneToMany(mappedBy = "posts")
+//    List<Like> like = new ArrayList<>();
+    @Setter
+    private int likeCount = 0;
 
     @Builder
     public Posts(String title, String content, String author) {

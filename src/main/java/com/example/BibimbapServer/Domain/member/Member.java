@@ -1,16 +1,17 @@
 package com.example.BibimbapServer.Domain.member;
 
-import com.example.BibimbapServer.Domain.like.Like;
 import com.example.BibimbapServer.Domain.posts.Posts;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Member {
@@ -33,8 +34,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     List<Posts> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "like")
-    List<Like> like = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    List<Like> like = new ArrayList<>();
 
     @Builder
     public Member(String name, String email, String picture, Role role) {

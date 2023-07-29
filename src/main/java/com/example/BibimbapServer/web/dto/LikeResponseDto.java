@@ -1,6 +1,6 @@
 package com.example.BibimbapServer.web.dto;
 
-import com.example.BibimbapServer.Domain.like.Like;
+import com.example.BibimbapServer.Domain.like.Likes;
 import com.example.BibimbapServer.Domain.member.Member;
 import com.example.BibimbapServer.Domain.posts.Posts;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class LikeResponseDto {
     private LocalDateTime like_date;
 
     @Builder
-    public LikeResponseDto(Like entity){
+    public LikeResponseDto(Likes entity){
         this.id = entity.getId();
         this.post = entity.getPost();
         this.member = entity.getMember();

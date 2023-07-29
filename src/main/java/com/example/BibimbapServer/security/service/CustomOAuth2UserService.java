@@ -2,6 +2,7 @@ package com.example.BibimbapServer.security.service;
 
 import com.example.BibimbapServer.Domain.member.Member;
 import com.example.BibimbapServer.Domain.member.MemberRepository;
+import com.example.BibimbapServer.Domain.member.Role;
 import com.example.BibimbapServer.security.dto.OAuthAttributes;
 import com.example.BibimbapServer.security.dto.SessionUser;
 import jakarta.servlet.http.HttpSession;
@@ -49,7 +50,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Member member = memberRepository.findByEmail(attributes.getEmail())
                 .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
-
+        member.setRole(Role.USER);
         return memberRepository.save(member);
     }
 }

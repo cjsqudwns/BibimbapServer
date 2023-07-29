@@ -50,6 +50,18 @@ public class PostsService {
 
         return new PostsResponseDto(entity);
     }
+
+    public PostsResponseDto findByEmail(Long id, String email){
+        Posts entity = postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ id));
+        Member sessionMember = entity.getMember();
+        Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ id));
+        if(findMember == sessionMember){
+            return new PostsResponseDto(entity);
+        }else{
+            return null;
+        }
+
+    }
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findAllDesc() {
         return postsRepository.findAllDesc().stream()

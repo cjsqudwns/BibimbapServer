@@ -1,7 +1,7 @@
-package com.example.BibimbapServer.service.like;
+package com.example.BibimbapServer.service.likes;
 
 import com.example.BibimbapServer.Domain.like.Likes;
-import com.example.BibimbapServer.Domain.like.LikeRepository;
+import com.example.BibimbapServer.Domain.like.LikesRepository;
 import com.example.BibimbapServer.Domain.member.Member;
 import com.example.BibimbapServer.Domain.member.MemberRepository;
 import com.example.BibimbapServer.Domain.posts.Posts;
@@ -12,10 +12,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
-public class LikeService {
-    private final LikeRepository likeRepository;
+public class LikesService {
+    private final LikesRepository likesRepository;
     private final PostsRepository postsRepository;
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
@@ -27,11 +30,7 @@ public class LikeService {
         Posts post = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 post가 없습니다. id=" + postId));
         post.setLikeCount(post.getLikeCount() + 1);
-//        Posts posts = postsRepository.findById(requestDto.getPostId())
-//                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 post가 없습니다. id=" + requestDto.getPostId()));
-//        Member member = memberRepository.findById(requestDto.getMemberId())
-//                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 member가 없습니다. id=" + requestDto.getMemberId()));
-        return likeRepository.save(Likes.of(post, member)).getId();
+        return likesRepository.save(Likes.of(post, member)).getId();
     }
 
     @Transactional
@@ -40,22 +39,35 @@ public class LikeService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 member가 없습니다. id=" + memberId));
         Posts post = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 post가 없습니다. id=" + postId));
-        Like
-        return likeRepository.delete(post);
+        post.setLikeCount(post.getLikeCount() - 1);
+        Likes like = likesRepository.findByPostAndMember(post, member).get(0);
+        Long likeId = like.getId();
+        likesRepository.delete(like);
+        return likeId;
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public int getLikeCount(Long postId) {
         Posts posts = postsRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + postId));
         return posts.getLikeCount();
     }
-
-    public LikeResponseDto findById(Long likeId) {
-        Likes entity = likeRepository.findById(likeId).orElseThrow(() -> new IllegalArgumentException("해당 좋아요 정보가 없습니다. id=" + likeId));
-        return new LikeResponseDto(entity);
+    @Transactional(readOnly = true)
+    public MemberResponseDto findMemberById(Long likeId) {
+        Likes like = likesRepository.findById(likeId).orElseThrow(() -> new IllegalArgumentException("해당 좋아요 정보가 없습니다. id=" + likeId));
+        Member member = like.getMember();
+        return new MemberResponseDto(member);
+    }
+    @Transactional(readOnly = true)
+    public List<MemberResponseDto> findAllMember(Long postId) {
+        Posts post = postsRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 post가 없습니다. id=" + postId));
+        List<Likes> likesList = likesRepository.findAllByPost(post);
+        List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
+        for(int i = 0; i < likesList.size(); i++){
+            MemberResponseDto temp = new MemberResponseDto(likesList.get(i).getMember());
+            memberResponseDtoList.add(temp);
+        }
+        return memberResponseDtoList;
     }
 
-//        public LikeResponseDto findAll(Long likeId){
-//
-//        }
 }
 

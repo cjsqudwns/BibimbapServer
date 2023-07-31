@@ -21,7 +21,7 @@ public class LikeResponseDto {
     @Builder
     public LikeResponseDto(Likes entity){
         this.id = entity.getId();
-        this.post = entity.getPost();
+        this.post = entity.getPosts();
         this.member = entity.getMember();
         this.like_date = entity.getCreatedDate();
     }

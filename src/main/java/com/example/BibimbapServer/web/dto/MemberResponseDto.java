@@ -16,11 +16,11 @@ public class MemberResponseDto {
     private String picture;
     private Role role;
     @Builder
-    public MemberResponseDto(Member entity) {
-        this.id = entity.getId();
-        this.name = entity.getName();
-        this.email = entity.getEmail();
-        this.picture = entity.getPicture();
-        this.role = entity.getRole();
+    public MemberResponseDto(Member member) {
+        this.id = member.getId();
+        this.name = member.getName();
+        this.email = member.getEmail();
+        this.picture = member.getPicture();
+        this.role = member.getRole();
     }
 }

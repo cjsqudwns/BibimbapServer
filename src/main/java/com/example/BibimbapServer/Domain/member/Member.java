@@ -1,5 +1,6 @@
 package com.example.BibimbapServer.Domain.member;
 
+import com.example.BibimbapServer.Domain.like.Likes;
 import com.example.BibimbapServer.Domain.posts.Posts;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -34,8 +35,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     List<Posts> posts = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "member")
-//    List<Like> like = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    List<Likes> likes = new ArrayList<>();
 
     @Builder
     public Member(String name, String email, String picture, Role role) {

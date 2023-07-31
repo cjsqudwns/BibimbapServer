@@ -18,22 +18,15 @@ public class Likes extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "POSTS_ID")
-    private Posts post;
+    private Posts posts;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @Builder
-    public Likes(Posts post, Member member){
-        this.post = post;
+    public Likes(Posts posts, Member member){
+        this.posts = posts;
         this.member = member;
-    }
-
-    public static Likes of(Posts post, Member member) {
-        return Likes.builder()
-                .post(post)
-                .member(member)
-                .build();
     }
 }
